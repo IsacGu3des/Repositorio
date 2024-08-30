@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+
 
 public class Player : MonoBehaviour
 {
@@ -13,9 +15,11 @@ public class Player : MonoBehaviour
     public bool doublejum;
     private Animator anim;
     
+    
     // Start is called before the first frame update
     void Start()
     {
+        
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
     }
@@ -23,10 +27,14 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
         Jump();
-        
     }
+
+    private void FixedUpdate()
+    {
+        Move();
+    }
+
     void Move()
     {
         Vector3 movimento = new Vector3(Input.GetAxis("Horizontal"),0f, 0f);
@@ -86,9 +94,10 @@ public class Player : MonoBehaviour
             {
                 if(doublejum)
                 {
-                    rb.AddForce(new Vector2(0f, force), ForceMode2D.Impulse);
+                    rb.velocity = Vector2.up * force;
                     anim.SetBool("Jump", false);
                     anim.SetBool("DJump", true);
+                    
                     doublejum = false;
                 }
             }
